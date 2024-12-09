@@ -9,10 +9,21 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+import pymysql
+pymysql.install_as_MySQLdb()
 
 from pathlib import Path
-
+import environ
 from django.conf.global_settings import STATICFILES_DIRS, MEDIA_URL
+
+env = environ.Env()
+
+try:
+    environ.Env.read_env() # lectura de archivo .env
+    print("archivo .env cargado")
+    print(f"DATABASE_NAME: {env('DATABASE_NAME', default=None)}")
+except Exception as e:
+    print(f"eerror {e}")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,6 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
+    'spaces',
+    'reservations',
 ]
 
 MIDDLEWARE = [
@@ -78,11 +92,11 @@ WSGI_APPLICATION = 'coworking_system.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'coworking_db',
-        'USER': 'root',
-        'PASSWORD': 'nM1258menMa',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'NAME': env('DATABASE_NAME', default='coworking_db'),
+        'USER': env('DATABASE_USER', default='root'),
+        'PASSWORD': env('DATABASE_PASSWORD', default='nM1258menMa'),
+        'HOST': env('DATABASE_HOST', default='localhost'),
+        'PORT': env('DATABASE_PORT', default='3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
         }
