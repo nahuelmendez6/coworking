@@ -5,15 +5,34 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-class RegistrationForm(UserCreationForm):
+from .models import CustomUser
+
+
+class OwnerRegistratrionForm(UserCreationForm):
+
+    company_name = forms.CharField(max_length=100, required=True)
+
     class Meta:
-        model = User
-        fields = ['first_name','last_name','email','username','password1','password2']
+        model = CustomUser
+        fields = ['firstname', 'lastname', 'username','password1','password2','company_name']
         labels = {
-            'first_name':'Nombre',
-            'last_name':'Apellido',
-            'email':'Correo electronico',
+            'firstname':'Nombre',
+            'lastname':'Apellido',
             'username':'Nombre de usuario',
             'password1':'Contraseña',
-            'password2':'Repite contraseña'
+            'password2':'Repite la contraseña',
+            'company_name':'Nombre de tu empresa'
+        }
+
+class CustomerRegistrationForm(UserCreationForm):
+
+    class Meta:
+        model = CustomUser
+        fields = ['firstname', 'lastname', 'username','password1','password2']
+        labels = {
+            'firstname':'Nombre',
+            'lastname':'Apellido',
+            'username':'Nombre de usuario',
+            'password1':'Contraseña',
+            'password2':'Repite la contraseña',
         }
