@@ -7,3 +7,4 @@ class CustomUser(AbstractUser):
     lastname = models.CharField(max_length=100, blank=True, null=True)
     is_provider = models.BooleanField(default=False)
     company_name = models.CharField(max_length=100, blank=True, null=True)
+
