@@ -17,14 +17,14 @@ def register_customer(request):
             group = Group.objects.get(name='customer')
             group.user_set.add(user)
             login(request, user)
-            return redirect('home')
+            return render(request, 'customer_home.html')
     else:
         form = CustomerRegistrationForm()
 
     return render(request, 'register_customer.html', {'form':form})
 
 
-def register_provier(request):
+def register_owner(request):
 
     if request.method == 'POST':
         form = OwnerRegistratrionForm(request.POST)
@@ -33,7 +33,7 @@ def register_provier(request):
             group = Group.objects.get(name='owner')
             group.user_set.add(user)
             login(request, user)
-            return redirect('home')
+            return render(request, 'home.html')
 
     else:
         form = OwnerRegistratrionForm()
