@@ -14,10 +14,11 @@ class OwnerRegistratrionForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ['firstname', 'lastname', 'username','password1','password2','company_name']
+        fields = ['first_name', 'last_name','email' ,'username','password1','password2','company_name']
         labels = {
-            'firstname':'Nombre',
-            'lastname':'Apellido',
+            'first_name':'Nombre',
+            'last_name':'Apellido',
+            'email': 'Email',
             'username':'Nombre de usuario',
             'password1':'Contraseña',
             'password2':'Repite la contraseña',
@@ -28,10 +29,11 @@ class CustomerRegistrationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ['firstname', 'lastname', 'username','password1','password2']
+        fields = ['first_name', 'last_name','email' ,'username','password1','password2']
         labels = {
-            'firstname':'Nombre',
-            'lastname':'Apellido',
+            'first_name':'Nombre',
+            'last_name':'Apellido',
+            'email':'Email',
             'username':'Nombre de usuario',
             'password1':'Contraseña',
             'password2':'Repite la contraseña',
