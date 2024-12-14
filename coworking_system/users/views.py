@@ -64,3 +64,7 @@ def login(request):
             return redirect('home_view')
 
     return render(request, 'login.html', {'form':form})
+
+def logout(request):
+    login(request)
+    return redirect('login')
