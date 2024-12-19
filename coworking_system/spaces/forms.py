@@ -16,7 +16,24 @@ class NewSpaceForm(forms.ModelForm):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), label="Localidad")
     province = forms.ModelChoiceField(queryset=Province.objects.all(), label="Provincia")
 
+    # Campos adicionales para SpaceAmenities
+    amenities_name = forms.CharField(max_length=100, label="Nombre")
+    description = forms.Textarea()
+
+    # Campos adicionales para Room
+    room_name = forms.CharField(max_length=100, label="Nombre habitación")
+    capacity = forms.IntegerField(label="Capacidad")
+    price_per_hour = forms.DecimalField(max_digits=10, decimal_places=2, label="Precio por hora")
+
+    # Campo para cargar las imagenes
+    images = forms.ImageField(
+        widget=forms.ClearableFileInput(attrs={'multiple':True}),
+        required=False,
+        label='Carga imágenes del espacio'
+    )
+
     class Meta:
         model = Space
         fields = ['name', 'description', 'capacity', 'street', 'street_number',
-                  'floor', 'apartment', 'reference', 'city', 'department', 'province']
+                  'floor', 'apartment', 'reference', 'city', 'department', 'province', 'amenities_name', 'description',
+                  'room_name', 'capacity', 'price_per_hour', 'images']

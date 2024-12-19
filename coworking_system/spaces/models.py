@@ -88,7 +88,7 @@ class Amenity(models.Model):
         on_delete=CASCADE,
         related_name="amenities"
     )
-    name = models.CharField(max_length=100, unique=True,blank=True ,null=False)
+    amenitie_name = models.CharField(max_length=100, unique=True,blank=True ,null=False)
     description = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -100,7 +100,7 @@ class Room(models.Model):
         on_delete=CASCADE,
         related_name="rooms"
     )
-    name = models.CharField(max_length=100)
+    room_name = models.CharField(max_length=100)
     capacity = models.PositiveIntegerField()
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     is_available = models.BooleanField(default=True)
