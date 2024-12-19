@@ -12,12 +12,12 @@ def new_space(request):
             # Crear direccion
             address = SpaceAddress.objects.create(
                 street = form.cleaned_data['street'],
-                steet_number = form.cleaned_data['street_number'],
+                street_number = form.cleaned_data['street_number'],
                 floor = form.cleaned_data['floor'],
                 apartment = form.cleaned_data['apartment'],
                 reference = form.cleaned_data['reference'],
                 city = form.cleaned_data['city'],
-                deparpasstment = form.cleaned_data['department'],
+                department = form.cleaned_data['department'],
                 province = form.cleaned_data['province']
             )
 
@@ -27,7 +27,10 @@ def new_space(request):
             space.owner = request.user
             space.save()
 
-            return redirect('home')
+            return redirect('home_view')
+        else:
+            # Si el formulario no es valido, lo renderiza con errores
+            return render(request, 'add_space.html', {'form':form})
     else:
         form = NewSpaceForm()
         return render(request, 'add_space.html', {'form':form})

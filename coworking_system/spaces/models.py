@@ -14,11 +14,20 @@ CustomUser = import_module('users.models').CustomUser
 class City(models.Model):
     city_name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.city_name
+
 class Department(models.Model):
     department_name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.department_name
+
 class Province(models.Model):
     province_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.province_name
 
 class Hour(models.Model):
     hour = models.CharField(max_length=50)
@@ -45,7 +54,7 @@ class SpaceAddress(models.Model):
         related_name="department"
     )
     province = models.ForeignKey(
-        Department,
+        Province,
         on_delete=CASCADE,
         related_name="province"
     )
@@ -56,7 +65,7 @@ class SpaceAddress(models.Model):
 class Space(models.Model):
 
     name = models.CharField(max_length=100)
-    description = models.TimeField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     capacity = models.PositiveIntegerField()
     address = models.ForeignKey(
         SpaceAddress,
