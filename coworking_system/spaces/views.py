@@ -1,6 +1,8 @@
+from django.core.files import File
 from django.shortcuts import render, redirect
-from .models import Space, SpaceAddress
-from .forms import NewSpaceForm
+from .models import Space, SpaceAddress, Amenity, Room
+from .forms import NewSpaceForm, RoomFormSet, AmenityFormSet
+
 # Create your views here.
 """
 En la gestion de de espacios, la primera view debe ser la que permita crear espacios nuevos
@@ -8,6 +10,8 @@ En la gestion de de espacios, la primera view debe ser la que permita crear espa
 def new_space(request):
     if request.method == 'POST':
         form = NewSpaceForm(request.POST)
+        room_formset = RoomFormSet(request.POST, prefix='rooms')
+        amenity_formset = AmenityFormSet(request.POST, prefix='amenities')
         if form.is_valid():
             # Crear direccion
             address = SpaceAddress.objects.create(
@@ -27,10 +31,37 @@ def new_space(request):
             space.owner = request.user
             space.save()
 
+            # Guarda habitaciones relacionadas
+            rooms = room_formset.save(commit=False)
+            for room in rooms:
+                room.space = space
+                room.save()
+
+            # Guarda las amenities relacionadas
+            amenities = amenity_formset.save(commit=False)
+            for amenity in amenities:
+                amenity.space = space
+                amenity.save()
+
+            # Imagenes
+            files = request.FILES.getlist('files')
+            for file in files:
+                File.objets.create(space=space, file=file)
+
             return redirect('home_view')
+
         else:
             # Si el formulario no es valido, lo renderiza con errores
             return render(request, 'add_space.html', {'form':form})
     else:
         form = NewSpaceForm()
-        return render(request, 'add_space.html', {'form':form})
+        room_formset = RoomFormSet(prefix='rooms')
+        amenity_formset = AmenityFormSet(prefix='amenities')
+
+        return render(request, 'add_space.html',
+                      {
+                          'form': form,
+                          'room_formset': room_formset,
+                          'amenity_formset': amenity_formset,
+                      })
+

@@ -80,19 +80,6 @@ class Space(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
-class Amenity(models.Model):
-
-    space = models.ForeignKey(
-        Space,
-        on_delete=CASCADE,
-        related_name="amenities"
-    )
-    amenitie_name = models.CharField(max_length=100, unique=True,blank=True ,null=False)
-    description = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
 class Room(models.Model):
 
     space = models.ForeignKey(
@@ -102,8 +89,21 @@ class Room(models.Model):
     )
     room_name = models.CharField(max_length=100)
     capacity = models.PositiveIntegerField()
+    description = models.TextField(blank=True, null=True)
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     is_available = models.BooleanField(default=True)
+    amenities = models.ManyToManyField('Amenity', related_name='rooms')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Amenity(models.Model):
+
+    space = models.ForeignKey(
+        Space,
+        on_delete=CASCADE,
+        related_name="amenities"
+    )
+    amenity_name = models.CharField(max_length=100, unique=True,blank=True ,null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import inlineformset_factory
 
 from .models import Space, SpaceAddress, Amenity, Room, Review, SpaceImage, WorkingHours, City, Department, Province
 
@@ -16,24 +17,31 @@ class NewSpaceForm(forms.ModelForm):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), label="Localidad")
     province = forms.ModelChoiceField(queryset=Province.objects.all(), label="Provincia")
 
-    # Campos adicionales para SpaceAmenities
-    amenities_name = forms.CharField(max_length=100, label="Nombre")
-    description = forms.Textarea()
-
-    # Campos adicionales para Room
-    room_name = forms.CharField(max_length=100, label="Nombre habitación")
-    capacity = forms.IntegerField(label="Capacidad")
-    price_per_hour = forms.DecimalField(max_digits=10, decimal_places=2, label="Precio por hora")
-
     # Campo para cargar las imagenes
     images = forms.ImageField(
-        widget=forms.ClearableFileInput(attrs={'multiple':True}),
+        widget=forms.FileInput(),
         required=False,
-        label='Carga imágenes del espacio'
+        label="Cargar imágenes del espacio"
     )
 
     class Meta:
         model = Space
         fields = ['name', 'description', 'capacity', 'street', 'street_number',
-                  'floor', 'apartment', 'reference', 'city', 'department', 'province', 'amenities_name', 'description',
-                  'room_name', 'capacity', 'price_per_hour', 'images']
+                  'floor', 'apartment', 'reference', 'city', 'department', 'province', 'images']
+
+
+# Formulario para Room
+RoomFormSet = inlineformset_factory(
+    Space, Room,
+    fields=['room_name', 'capacity', 'price_per_hour', 'description'],
+    extra=1,
+    can_delete=True
+)
+
+# Formulario para Amenity
+AmenityFormSet = inlineformset_factory(
+    Space, Amenity,
+    fields=['amenity_name'],
+    extra=1,
+    can_delete=True
+)
