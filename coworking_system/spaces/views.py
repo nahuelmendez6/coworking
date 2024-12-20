@@ -33,17 +33,22 @@ def new_space(request):
             space.owner = request.user
             space.save()
 
-            # Guardar habitaciones relacionadas
-            rooms = room_formset.save(commit=False)
-            for room in rooms:
-                room.space = space
-                room.save()
 
             # Guardar las amenities relacionadas
             amenities = amenity_formset.save(commit=False)
             for amenity in amenities:
                 amenity.space = space
                 amenity.save()
+
+            # Guardar habitaciones relacionadas
+            rooms = room_formset.save(commit=False)
+            for room in rooms:
+                room.space = space
+                room.save()
+
+                # Asociar amenities seleccionadas a cada habitacion
+                for amenity in amenities:
+                    room.amenities.add(amenity) # relacion muchos a mucho
 
             # Guardar imágenes
             files = request.FILES.getlist('files')
