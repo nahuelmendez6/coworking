@@ -27,54 +27,115 @@
         </div>
     </nav>
 
-
-
-
-
     <!-- Contenedor Principal -->
     <div class="container my-5">
         <div class="row">
-            <div class="col-md-8 offset-md-2">
+            <div class="col-md-10 offset-md-1">
                 <div class="card shadow">
                     <div class="card-body">
                         <h5 class="card-title mb-4">Agregar Nuevo Espacio</h5>
                         <form method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
-                            {% load crispy_forms_tags %}
-                            {{ form|crispy }}
-                            <h3>Información del Espacio</h3>
-                            {{ form.as_p|crispy }}
+                            {% load widget_tweaks %}
+                            <!-- Tabs Navigation -->
+                            <ul class="nav nav-tabs" id="spaceFormTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="basic-info-tab" data-bs-toggle="tab" data-bs-target="#basic-info" type="button" role="tab">
+                                        Información Básica
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button" role="tab">
+                                        Dirección
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="rooms-tab" data-bs-toggle="tab" data-bs-target="#rooms" type="button" role="tab">
+                                        Habitaciones
+                                    </button>
+                                </li>
+                            </ul>
 
-                            <h3>Habitaciones</h3>
-                            {{ room_formset.management_form }}
-                            <div id="rooms-container">
-                                {% for form in room_formset %}
-                                    <div class="card mb-3">
-                                        {{ form.as_p }}
-                                        {% if form.instance.pk %}
-                                            <button type="button" class="btn btn-danger" onclick="removeRoom(this)">Eliminar</button>
-                                        {% endif %}
+                            <!-- Tabs Content -->
+                            <div class="tab-content mt-3" id="spaceFormTabsContent">
+                                <div class="tab-pane fade show active" id="basic-info" role="tabpanel">
+                                    <div class="mb-3">
+                                        {{ form.name.label_tag }}
+                                        {{ form.name|add_class:"form-control" }}
                                     </div>
-                                {% endfor %}
-                            </div>
-                            <button type="button" class="btn btn-success" id="add-room">Agregar Habitación</button>
-
-                            <h3>Comodidades</h3>
-                            {{ amenity_formset.management_form }}
-                            <div id="amenities-container">
-                                {% for form in amenity_formset %}
-                                    <div class="card mb-3">
-                                        {{ form.as_p }}
-                                        {% if form.instance.pk %}
-                                            <button type="button" class="btn btn-danger" onclick="removeAmenity(this)">Eliminar</button>
-                                        {% endif %}
+                                    <div class="mb-3">
+                                        {{ form.description.label_tag }}
+                                        {{ form.description|add_class:"form-control" }}
                                     </div>
-                                {% endfor %}
-                            </div>
-                            <button type="button" class="btn btn-success" id="add-amenity">Agregar Comodidad</button>
+                                    <div class="mb-3">
+                                        {{ form.capacity.label_tag }}
+                                        {{ form.capacity|add_class:"form-control" }}
+                                    </div>
+                                </div>
 
-                            <button type="submit" class="btn btn-primary mt-3">Guardar Espacio</button>
+                                <div class="tab-pane fade" id="address" role="tabpanel">
+                                    <div class="mb-3">
+                                        {{ form.street.label_tag }}
+                                        {{ form.street|add_class:"form-control" }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.street_number.label_tag }}
+                                        {{ form.street_number|add_class:"form-control" }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.floor.label_tag }}
+                                        {{ form.floor|add_class:"form-control" }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.apartment.label_tag }}
+                                        {{ form.apartment|add_class:"form-control" }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.reference.label_tag }}
+                                        {{ form.reference|add_class:"form-control" }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.city.label_tag }}
+                                        {{ form.city|add_class:"form-control" }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.department.label_tag }}
+                                        {{ form.department|add_class:"form-control" }}
+                                    </div>
+                                    <div class="mb-3">
+                                        {{ form.province.label_tag }}
+                                        {{ form.province|add_class:"form-control" }}
+                                    </div>
+                                    <!-- Resto de los campos con la misma estructura -->
+                                </div>
+                                <div class="tab-pane fade" id="rooms" role="tabpanel">
+                                    <div id="rooms-container">
+                                        {{ room_formset.management_form }}
+                                        {% for form in room_formset %}
+                                            <div class="card mb-4">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Habitación {{ forloop.counter }}</h5>
+                                                    {{ form.as_p }}
+
+                                                    <div id="amenities-container-{{ forloop.counter }}" class="mb-3">
+                                                        <h6>Comodidades</h6>
+                                                        {{ amenity_formset.management_form }}
+                                                        {% for amenity_form in amenity_formset %}
+                                                            {{ amenity_form.as_p }}
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-danger" onclick="removeRoom(this)">Eliminar Habitación</button>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- Resto de los campos con la misma estructura -->
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mt-4">Guardar Espacio</button>
                         </form>
+
 
                     </div>
                 </div>
@@ -88,30 +149,17 @@
             const container = document.getElementById('rooms-container');
             const totalForms = document.querySelector('#id_rooms-TOTAL_FORMS');
             const formIndex = totalForms.value;
-            const newForm = container.children[0].cloneNode(true);
-            newForm.innerHTML = newForm.innerHTML.replace(/-0-/g, `-${formIndex}-`);
-            container.appendChild(newForm);
-            totalForms.value = parseInt(totalForms.value) + 1;
-        });
 
-        document.getElementById('add-amenity').addEventListener('click', function() {
-            const container = document.getElementById('amenities-container');
-            const totalForms = document.querySelector('#id_amenities-TOTAL_FORMS');
-            const formIndex = totalForms.value;
-            const newForm = container.children[0].cloneNode(true);
-            newForm.innerHTML = newForm.innerHTML.replace(/-0-/g, `-${formIndex}-`);
+            const newForm = container.children[0].cloneNode(true); // Clonar la primera habitación
+            newForm.innerHTML = newForm.innerHTML.replace(/-0-/g, `-${formIndex}-`); // Actualizar índices
             container.appendChild(newForm);
+
             totalForms.value = parseInt(totalForms.value) + 1;
         });
 
         function removeRoom(button) {
             button.closest('.card').remove();
         }
-
-        function removeAmenity(button) {
-            button.closest('.card').remove();
-        }
-
     </script>
 </body>
 </html>

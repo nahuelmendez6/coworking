@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # Apps del proyecto
     'spaces',
     'users',
+    'widget_tweaks',
 
 ]
 

@@ -26,8 +26,12 @@ class NewSpaceForm(forms.ModelForm):
 
     class Meta:
         model = Space
-        fields = ['name', 'description', 'capacity', 'street', 'street_number',
-                  'floor', 'apartment', 'reference', 'city', 'department', 'province', 'images']
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.basic_info = ['name', 'description', 'capacity']
+        self.address = ['street', 'street_number', 'floor', 'apartment', 'reference', 'city', 'department', 'province']
 
 
 # Formulario para Room
