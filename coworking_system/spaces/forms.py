@@ -17,6 +17,16 @@ class NewSpaceForm(forms.ModelForm):
     department = forms.ModelChoiceField(queryset=Department.objects.all(), label="Localidad")
     province = forms.ModelChoiceField(queryset=Province.objects.all(), label="Provincia")
 
+    # Campo para seleccionar amenities
+    amenities = forms.ModelMultipleChoiceField(
+        queryset=Amenity.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="Comodidades disponibles"
+    )
+
+
+
     # Campo para cargar las imagenes
     images = forms.ImageField(
         widget=forms.FileInput(),
@@ -42,10 +52,3 @@ RoomFormSet = inlineformset_factory(
     can_delete=True
 )
 
-# Formulario para Amenity
-AmenityFormSet = inlineformset_factory(
-    Space, Amenity,
-    fields=['amenity_name'],
-    extra=1,
-    can_delete=True
-)

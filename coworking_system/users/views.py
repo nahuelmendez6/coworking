@@ -35,23 +35,41 @@ def register_customer(request):
     return render(request, 'register_customer.html', {'form':form})
 
 
-def register_owner(request):
+from django.contrib.auth import login
+from django.contrib.auth.models import Group
+from django.shortcuts import render, redirect
+from .forms import OwnerRegistratrionForm  # Adjust the import path as needed
 
+
+def register_owner(request):
     if request.method == 'POST':
         form = OwnerRegistratrionForm(request.POST)
         if form.is_valid():
             user = form.save()
-            group = Group.objects.get(name='owner')
-            group.user_set.add(user)
+
+            # Make sure the 'owner' group exists before attempting to add the user
+            try:
+                group = Group.objects.get(name='owner')
+                group.user_set.add(user)
+            except Group.DoesNotExist:
+                # Handle case where the 'owner' group does not exist
+                # Optionally create the group if needed
+                group = Group.objects.create(name='owner')
+                group.user_set.add(user)
+
+            # Log the user in
             login(request, user)
+
+            # Redirect to a page after login
             return redirect('home_view')
 
     else:
         form = OwnerRegistratrionForm()
 
-    return render(request, 'register_owner.html', {'form':form})
+    return render(request, 'register_owner.html', {'form': form})
 
-def login(request):
+
+def login_user(request):
     form = AuthenticationForm(request, request.POST)
     if request.method == 'POST':
         if form.is_valid():

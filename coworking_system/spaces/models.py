@@ -98,14 +98,12 @@ class Room(models.Model):
 
 class Amenity(models.Model):
 
-    space = models.ForeignKey(
-        Space,
-        on_delete=CASCADE,
-        related_name="amenities"
-    )
     amenity_name = models.CharField(max_length=100, unique=True,blank=True ,null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.amenity_name
 
 class Review(models.Model):
 

@@ -109,28 +109,42 @@
                                     <!-- Resto de los campos con la misma estructura -->
                                 </div>
                                 <div class="tab-pane fade" id="rooms" role="tabpanel">
+                                    <h4>Habitaciones</h4>
                                     <div id="rooms-container">
-                                        {{ room_formset.management_form }}
-                                        {% for form in room_formset %}
-                                            <div class="card mb-4">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">Habitación {{ forloop.counter }}</h5>
-                                                    {{ form.as_p }}
+                                        <div>
+                                            {{ room_formset.management_form }}
+                                            {% for form in room_formset %}
+                                                <div class="card mb-4">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">Habitación {{ forloop.counter }}</h5>
+                                                        {{ form.room_name.label_tag }}
+                                                        {{ form.room_name|add_class:"form-control" }}
 
-                                                    <div id="amenities-container-{{ forloop.counter }}" class="mb-3">
-                                                        <h6>Comodidades</h6>
-                                                        {{ amenity_formset.management_form }}
-                                                        {% for amenity_form in amenity_formset %}
-                                                            {{ amenity_form.as_p }}
-                                                        {% endfor %}
+                                                        {{ form.capacity.label_tag }}
+                                                        {{ form.capacity|add_class:"form-control" }}
+
+                                                        {{ form.price_per_hour.label_tag }}
+                                                        {{ form.price_per_hour|add_class:"form-control" }}
+
+                                                        {{ form.description.label_tag }}
+                                                        {{ form.description|add_class:"form-control" }}
+
+
                                                     </div>
+                                                    <button type="button" class="btn btn-danger" onclick="removeRoom(this)">Eliminar Habitación</button>
                                                 </div>
-                                                <button type="button" class="btn btn-danger" onclick="removeRoom(this)">Eliminar Habitación</button>
-                                            </div>
-                                        {% endfor %}
+                                            {% endfor %}
+                                        </div>
                                     </div>
-                                    <!-- Resto de los campos con la misma estructura -->
+                                                                    <h6>Comodidades</h6>
+                                    {% for checkbox in form.amenities %}
+                                        <div>
+                                            {{ checkbox }}
+                                        </div>
+                                    {% endfor %}
+                                        <button type="button" class="btn btn-success" id="add-room">Agregar Habitación</button>
                                 </div>
+
                             </div>
 
                             <button type="submit" class="btn btn-primary mt-4">Guardar Espacio</button>
@@ -143,19 +157,26 @@
         </div>
     </div>
 
+        <!-- Template para nuevas habitaciones -->
+    <script type="text/template" id="empty-room-form">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Habitación {{ formIdx }}</h5>
+                {{ room_formset.empty_form.as_p|safe }}
+            </div>
+            <button type="button" class="btn btn-danger" onclick="removeRoom(this)">Eliminar Habitación</button>
+        </div>
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.getElementById('add-room').addEventListener('click', function() {
             const container = document.getElementById('rooms-container');
-            const totalForms = document.querySelector('#id_rooms-TOTAL_FORMS');
-            const formIndex = totalForms.value;
-
-            const newForm = container.children[0].cloneNode(true); // Clonar la primera habitación
-            newForm.innerHTML = newForm.innerHTML.replace(/-0-/g, `-${formIndex}-`); // Actualizar índices
-            container.appendChild(newForm);
-
-            totalForms.value = parseInt(totalForms.value) + 1;
+            const formIdx = document.querySelectorAll('#rooms-container .card').length;
+            const emptyForm = document.getElementById('empty-room-form').innerHTML.replace(/__prefix__/g, formIdx);
+            container.insertAdjacentHTML('beforeend', emptyForm);
         });
+
 
         function removeRoom(button) {
             button.closest('.card').remove();
