@@ -37,6 +37,7 @@ class NewSpaceForm(forms.ModelForm):
     class Meta:
         model = Space
         fields = '__all__'
+        exclude = ['address', 'owner']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
