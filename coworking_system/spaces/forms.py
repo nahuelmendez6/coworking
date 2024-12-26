@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import inlineformset_factory
 
-from .models import Space, SpaceAddress, Amenity, Room, Review, SpaceImage, WorkingHours, City, Department, Province
+from .models import (Space, SpaceAddress, Amenity, Room, Review, SpaceImage, WorkingHours, City, Department, Province)
 
 class NewSpaceForm(forms.ModelForm):
 
@@ -25,7 +25,12 @@ class NewSpaceForm(forms.ModelForm):
         label="Comodidades disponibles"
     )
 
-
+    # Campo para cargar imagenes de habitaciones
+    roomImages = forms.ImageField(
+        widget=forms.FileInput(),
+        required=False,
+        label="Fotos de la habitación"
+    )
 
     # Campo para cargar las imagenes
     images = forms.ImageField(
@@ -47,9 +52,12 @@ class NewSpaceForm(forms.ModelForm):
 
 # Formulario para Room
 RoomFormSet = inlineformset_factory(
-    Space, Room,
+    Space,
+    Room,
     fields=['room_name', 'capacity', 'price_per_hour', 'description'],
     extra=1,
     can_delete=True
 )
+
+
 

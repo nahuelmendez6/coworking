@@ -1,8 +1,11 @@
+from sys import prefix
+
 from django.core.files import File
 from django.forms import modelformset_factory
 from django.shortcuts import render, redirect
 from .models import Space, SpaceAddress, Amenity, Room
 from .forms import NewSpaceForm, RoomFormSet
+
 
 def new_space(request):
     if request.method == 'POST':
@@ -29,6 +32,7 @@ def new_space(request):
 
                 rooms = room_formset.save(commit=False)
                 amenities = form.cleaned_data['amenities']
+                #room_images = request.FILES.getList('roomImage')
 
                 for room in rooms:
                     room.space = space
@@ -36,9 +40,6 @@ def new_space(request):
                     for amenity in amenities:
                         room.amenities.add(amenity)
 
-                files = request.FILES.getlist('files')
-                for file in files:
-                    File.objects.create(space=space, file=file)
 
                 return redirect('home_view')
 
