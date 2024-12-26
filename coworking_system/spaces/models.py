@@ -77,6 +77,7 @@ class Space(models.Model):
         on_delete=models.CASCADE,
         related_name="spaces"
     )
+    spaceImage = models.ManyToManyField('SpaceImage', related_name='spaceImg')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -139,7 +140,7 @@ class SpaceImage(models.Model):
         on_delete=CASCADE,
         related_name="images"
     )
-    image = models.ImageField(upload_to='spaces/')
+    image = models.ImageField(upload_to='uploads/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -33,7 +33,7 @@ class NewSpaceForm(forms.ModelForm):
     )
 
     # Campo para cargar las imagenes
-    images = forms.ImageField(
+    spaceImage = forms.ImageField(
         widget=forms.FileInput(),
         required=False,
         label="Cargar imágenes del espacio"
